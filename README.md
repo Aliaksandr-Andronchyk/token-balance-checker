@@ -1,8 +1,16 @@
 # token-balance-checker
 
-CLI tool that shows ETH balance and top ERC-20 token balances for any Ethereum address. Uses the Etherscan public API.
+CLI tool that shows ETH and ERC-20 token balances for any Ethereum address.
+
+It queries a public Ethereum RPC endpoint (llamarpc) to fetch the native ETH balance and calls `balanceOf` on several well-known token contracts: USDT, USDC, DAI, WETH, LINK.
 
 ## Install
+
+```
+pip install requests rich
+```
+
+Or from the requirements file:
 
 ```
 pip install -r requirements.txt
@@ -11,17 +19,13 @@ pip install -r requirements.txt
 ## Usage
 
 ```
-python balance_checker.py --address 0xYourEthereumAddress
+python main.py 0xYourEthereumAddressHere
 ```
 
-With a custom Etherscan API key:
+The output is a table with token names and their balances.
 
-```
-python balance_checker.py --address 0xYourEthereumAddress --api-key YOUR_KEY
-```
+## How it works
 
-Show only top 5 tokens:
-
-```
-python balance_checker.py --address 0xYourEthereumAddress --top 5
-```
+- ETH balance -- fetched via `eth_getBalance` JSON-RPC call.
+- ERC-20 balances -- fetched by calling the `balanceOf(address)` function on each token contract via `eth_call`.
+- No API key required -- uses a free public RPC endpoint.
